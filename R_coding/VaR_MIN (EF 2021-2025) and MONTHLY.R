@@ -11,16 +11,16 @@ library(readxl)
 library(readr)
 library(tidyquant)
 library(writexl)
-library(zoo)  # per LOCF
+library(zoo)  
 library(PortfolioAnalytics)
-library(PerformanceAnalytics)  # per VaR/ES
+library(PerformanceAnalytics)  # for VaR/ES
 library(xts)
 library(quantmod)
-library(DEoptim)               # se usi optimize_method = "DEoptim"
+library(DEoptim)               
 
-#TENTATIVO VAROPTIMIZER (VaR min) NLOPTR
+# VAROPTIMIZER (VaR min) NLOPTR
 
-percentile <- 0.95 #livello di confidenze 95% VaR
+percentile <- 0.95 #confidence level 95% VaR
 
 tickers <- symbols
 start_date <- "2021-05-31"
@@ -40,15 +40,15 @@ colnames(pricesVAR) <- tickers
 #
 index(pricesVAR) <- as.Date(index(pricesVAR))
 
-# 1) Pulisco dagli NA 
+# 1) Clean NA 
 pricesVAR <- na.omit(pricesVAR)
 
-# 2) Confronto SEMPRE cleanGB vs cleanCB
-diff_VAR <- setdiff(index(pricesVAR), prices_wideGB_sync$date)  # in VAR ma non in GB
+# 2) Dataset size cleanGB vs cleanCB
+diff_VAR <- setdiff(index(pricesVAR), prices_wideGB_sync$date)  
 
 
-# 3) Conta e stampa le vere date
-length(diff_VAR)   # dovrebbe dare 35 (1078-1043)
+# 3) counting and printing dates
+length(diff_VAR)   # should be  35 (1078-1043)
 
 
 as.Date(diff_VAR, origin = "1970-01-01")
@@ -64,12 +64,12 @@ dates_to_removeVAR <- as.Date(c(
   "2025-09-22"
 ))
 
-# Elimino date da GB_clean
+# delete GB_clean
 prices_syncVAR <- pricesVAR[ !(index(pricesVAR) %in% dates_to_removeVAR), ]
 
-# Controllo: nessuna di quelle date rimasta
-nrow(prices_syncVAR) #sono 1043, quindi è giusto
-any(index(prices_syncVAR) %in% dates_to_removeVAR) # False = tutte le date segnalate sono state rimosse correttamente
+# checking 
+nrow(prices_syncVAR) # 1043
+any(index(prices_syncVAR) %in% dates_to_removeVAR) # False = every unmatched date has been deleted
 
 
 
@@ -78,39 +78,31 @@ any(index(prices_syncVAR) %in% dates_to_removeVAR) # False = tutte le date segna
 # compute returns
 #  
 testData_return <- diff(prices_syncVAR, arithmetic=FALSE, na.pad=FALSE) - 1
-#
 
-#  Compare VaR with quantile calculations for assets
-#  when portfolio_method = "single" in VaR, the VaR for each column in R is calculated 
-# questa è la VaR giornaliera per ogni asset
-#
 VaR_asset_hist <- VaR(R = testData_return, p=percentile, method="historical",
                       portfolio_method = "single")
 print(VaR_asset_hist)
 
-# stessa cosa ma in percentuale
-
+# same thing but in %
 VaR_asset_hist_pct <- 100 * VaR_asset_hist
 print(apply(round(VaR_asset_hist_pct, 2), 2, function(x) paste0(x, "%")))
 
-#stesso calcolo ma utilizzando il quinto percentile. 
-
-quant_asset_hist <- sapply(testData_return, quantile, probs=1-percentile, type=7)
-print(quant_asset_hist)  
 
 
 ###################################################################################################
-####### I GB hanno un VAr leggermente maggiore rispetto ai CB, quindi sembrano             ########
-####### mostrare una buona resilienza ma minore erispetto ai CB analizzati. bisogna        ########
-####### capire se ci sono vantaggi invece di sharpe ratio o rendimento e volatilità        ########
-####### leggermente maggiori nel caso dei GB, perchè così si potrebbe spingere per quelli  ########
+####### GBs exhibit a slightly higher VaR compared to CBs, suggesting good resilience     ########
+####### but marginally lower than that observed for the analyzed CB portfolios. It is     ########
+####### therefore necessary to assess whether advantages emerge in terms of Sharpe ratio  ########
+####### or higher returns and volatility in the case of GBs, which could justify a        ########
+####### preference for these instruments.                                                  ########
 ###################################################################################################
+
 
 
 
 
 ##############################################
-## DIMENSIONI
+## DIMENSIONS
 ##############################################
 
 n_assetGB <- ncol(mydataGB) 
@@ -118,13 +110,13 @@ n_assetCB <- ncol(mydataCB)
 
 library(nloptr)
 
-# Inizializzo liste per salvare i pesi provati
+# lists
 weight_historyGB <- list()
 weight_historyCB <- list()
 
 
 ##############################################
-## FUNZIONI VaR 
+##  VaR  Function
 ##############################################
 
 VaR_GB <- function(W, alpha = 0.95) {
@@ -150,7 +142,7 @@ VaR_CB <- function(W, alpha = 0.95) {
 }
 
 ##############################################
-## VINCOLI 
+## Constraints
 ##############################################
 constraint_eq <- function(W) {
   return(sum(W) - 1)
@@ -165,7 +157,7 @@ initial_weightsGB <- rep(1 / n_assetGB, n_assetGB)
 initial_weightsCB <- rep(1 / n_assetCB, n_assetCB)
 
 ##############################################
-## OTTIMIZZAZIONE (Minimizzazione VaR)
+## OPTIMIZATION (Min VaR)
 ##############################################
 opt_resultVaR_GB <- nloptr(
   x0 = initial_weightsGB, 
@@ -186,24 +178,23 @@ opt_resultVaR_CB <- nloptr(
 )
 
 ##############################################
-## RISULTATI
+## RESULTS
 ##############################################
-# Disattiva notazione scientifica
-options(scipen = 999, digits = 10)  # niente notazione scientifica, 10 cifre totali
+# no scientific notation
+options(scipen = 999, digits = 10) 
 
+W_GB      <- opt_resultVaR_GB$solution      
+VaR_min_GB <- -opt_resultVaR_GB$objective      
 
-W_GB      <- opt_resultVaR_GB$solution      # pesi ottimali (vettore)
-VaR_min_GB <- -opt_resultVaR_GB$objective       # VaR minimizzato portafoglio GB
-
-W_CB      <- opt_resultVaR_CB$solution      # pesi ottimali (vettore)
-VaR_min_CB <- -opt_resultVaR_CB$objective       # VaR minimizzato portafoglio CB
+W_CB      <- opt_resultVaR_CB$solution     
+VaR_min_CB <- -opt_resultVaR_CB$objective       
 
 cat("Weights ottimali GB portfolio:" , W_GB, "\n")
 cat("VaR GB minimo alfa 0.95:", VaR_min_GB, "\n")
 
 
-cat("Weights ottimali CB portfolio:" , W_CB, "\n")
-cat("VaR CB minimo alfa 0.95:", VaR_min_CB, "\n")
+cat("Optimal weights CB portfolio:" , W_CB, "\n")
+cat("VaR CB min alpha 0.95:", VaR_min_CB, "\n")
 
 # OPPURE
 
@@ -229,30 +220,29 @@ cat("VaR min CB 2021-25:", VaR_min_CB, "\n\n")
 
 
 #########################################################################
-##              VaR MENSILE IN ENTRAMBI PORTAFOGLI                     ##
+##              VaR MONTHLY STRATEGY on BOTH PORTFOLIO                 ##
 #########################################################################
 
-### VaR MIN Portfolio MENSILE 2021-2025 (weight allocation)
+### VaR MIN Portfolio Monthly 2021-2025 (weight allocation)
 library(dplyr)
 library(lubridate)
 library(nloptr)
 
 confidence <- 0.95
 
-# 1) aggiungi la colonna 'month_start' (vera Date) ai due dataset
+# 1) add the column 'month_start' 
 daily_returnsGB <- daily_returnsGB %>%
   mutate(month_start = floor_date(date, "month"))
 daily_returnsCB <- daily_returnsCB %>%
   mutate(month_start = floor_date(date, "month"))
 
-# (consigliato) fai lo stesso su rf_sync così indicizzi per mese reale
+# same procedure for rf_sync , to index by month
 rf_sync <- rf_sync %>%
   mutate(month_start = month)
 
 monthly_results_VaRGB <- list()
 monthly_results_VaRCB <- list()
 
-# 2) ITERA su mesi reali (non su 1..12)
 for (m_date in sort(unique(daily_returnsGB$month_start))) {
   
   window_GB <- daily_returnsGB %>%
@@ -268,7 +258,7 @@ for (m_date in sort(unique(daily_returnsGB$month_start))) {
   X_CB <- window_CB %>% select(-date, -month, -month_start) %>% as.matrix()
   if (nrow(X_GB) == 0 || nrow(X_CB) == 0) next
   
-  # 3) RF per quel mese (scalare; oppure costruisci un vettore allineato per giorno)
+  # 3) RF for every month
   rf_vecCB <- rep(as.numeric(rf_sync$RF[rf_sync$month == m][1]), nrow(window_CB))
   rf_vecGB <- rep(as.numeric(rf_sync$RF[rf_sync$month == m][1]), nrow(window_CB))
 
@@ -301,14 +291,14 @@ for (m_date in sort(unique(daily_returnsGB$month_start))) {
   )
   
   monthly_results_VaRGB <- append(monthly_results_VaRGB, list(data.frame(
-    Month   = m_date,  # <-- vera Date
+    Month   = m_date,  
     XSX6.MI = opt_VaR_mGB$solution[ match("XSX6.MI", colnames(X_GB)) ],
     GRON.MI = opt_VaR_mGB$solution[ match("GRON.MI", colnames(X_GB)) ],
     IPRE.DE = opt_VaR_mGB$solution[ match("IPRE.DE", colnames(X_GB)) ],
     VaRm    = opt_VaR_mGB$objective
   )))
   monthly_results_VaRCB <- append(monthly_results_VaRCB, list(data.frame(
-    Month   = m_date,  # <-- vera Date
+    Month   = m_date, 
     XSX6.MI = opt_VaR_mCB$solution[ match("XSX6.MI", colnames(X_CB)) ],
     IEAA.L  = opt_VaR_mCB$solution[ match("IEAA.L",  colnames(X_CB)) ],
     IPRE.DE = opt_VaR_mCB$solution[ match("IPRE.DE", colnames(X_CB)) ],
@@ -353,65 +343,48 @@ View(monthly_results_VaRCB)
 #GB
 #########
 
-# Return mensile GB
+# Monthly return GB
 monthly_results_VaRGB$MeanRet <- sapply(monthly_results_VaRGB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsGB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month)
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_VaRGB[monthly_results_VaRGB$Month == m,
                                        c("XSX6.MI","GRON.MI","IPRE.DE")])
   
-  # calcolo rendimenti giornalieri del portafoglio e poi la media
+  # compute daily return of the portfolio and then the average
   port <- as.numeric(as.matrix(X) %*% w)
   mean(port, na.rm = TRUE)
 })
 
-# Volatilità mensile GB
 monthly_results_VaRGB$Vol <- sapply(monthly_results_VaRGB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsGB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month) %>%
     as.matrix()
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_VaRGB[monthly_results_VaRGB$Month == m,
                                        c("XSX6.MI","GRON.MI","IPRE.DE")])
-  
   sd(as.numeric(X %*% w), na.rm = TRUE)
 })
 
-# Return mensile CB
+# monthly return CB
 monthly_results_VaRCB$MeanRet <- sapply(monthly_results_VaRCB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsCB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month)
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_VaRCB[monthly_results_VaRCB$Month == m,
                                         c("XSX6.MI","IEAA.L","IPRE.DE")])
-  
-  # calcolo rendimenti giornalieri del portafoglio e poi la media
   port <- as.numeric(as.matrix(X) %*% w)
   mean(port, na.rm = TRUE)
 })
 
-# Volatilità mensile CB
+# Volatility Monthly basis CB
 monthly_results_VaRCB$Vol <- sapply(monthly_results_VaRCB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsCB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month) %>%
     as.matrix()
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_VaRCB[monthly_results_VaRCB$Month == m,
                                         c("XSX6.MI","IEAA.L","IPRE.DE")])
-  
   sd(as.numeric(X %*% w), na.rm = TRUE)
 })
 
