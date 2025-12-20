@@ -56,7 +56,7 @@ Two strategies are implemented:
 - Under **monthly re-optimization**, Green Bond portfolios achieve a **higher Sharpe Ratio**, though not always higher cumulative returns.
 - In **tail-risk minimization (CVaR)**, Corporate Bond portfolios display slightly stronger resilience during the 2022 fixed-income shock.
 
-![Sharpe, VaR and CVaR comparison](Desktop\WEBSITE\ppt_slides_small\slide-25.png)
+![Sharpe, VaR and CVaR comparison](docs\ppt_slides_small\slide-25.png)
 
 ---
 
