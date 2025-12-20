@@ -1,5 +1,5 @@
 ##############################################
-## LIBRERIE 
+## LIBRARIES
 ##############################################
 library(lubridate)
 library(dplyr)
@@ -12,11 +12,11 @@ library(readxl)
 library(readr)
 library(tidyquant)
 library(writexl)
-library(zoo)  # per LOCF
+library(zoo)  
 
 
 ##############################################
-## IMPORTO DATI 
+## DATA
 ##############################################
 symbols <- c("XSX6.MI","GRON.MI", "IEAA.L","IPRE.DE") 
 start_date <- "2021-05-31"
@@ -49,20 +49,20 @@ prices_wideCB <- Portfolio_pricesCB %>%
   arrange(date)
 
 ##############################################
-## SINCRONIZZAZIONE DATE E GESTIONE NA
+## ADJUSTING DATASETS and OMIT NA
 ##############################################
 
-# 1) Pulisco dagli NA 
+# 1) CLEANING NA 
 prices_wideGB_clean <- na.omit(prices_wideGB)
 prices_wideCB_clean <- na.omit(prices_wideCB)
 
-# 2) Confronto SEMPRE cleanGB vs cleanCB
+# 2) DATA SIZE
 diff_GB <- setdiff(prices_wideGB_clean$date, prices_wideCB_clean$date)  # in GB ma non in CB
 diff_CB <- setdiff(prices_wideCB_clean$date, prices_wideGB_clean$date)  # in CB ma non in GB
 
-# 3) Conta e stampa le vere date
-length(diff_GB)   # dovrebbe dare 19 (1062-1043)
-length(diff_CB)   # dovrebbe dare 0 (se CB_clean è sottoinsieme di GB_clean)
+# 3) DATA SIZE 2
+length(diff_GB)   # should be 19 (1062-1043)
+length(diff_CB)   # should be 0 (if CB_clean is now of the same  GB_clean size)
 
 as.Date(diff_GB, origin = "1970-01-01")
 as.Date(diff_CB, origin = "1970-01-01")
@@ -87,7 +87,7 @@ prices_wideCB_sync <- prices_wideCB_clean
 
 
 ##############################################
-## CALCOLO RETURNS (aritmetici e non log ) (corretto)
+## COMPUTE RETURNS (arithmetical instead of log ) 
 ##############################################
 
 daily_returnsGB <- prices_wideGB_sync %>%
@@ -103,7 +103,7 @@ daily_returnsCB <- prices_wideCB_sync %>%
   slice(-1)
 
 ##############################################
-## CREAZIONE MY DATA (tolgo colonna data per avere solo numeric)
+## CREATING MY DATA ( delete dare column to have a  numeric dataset)
 ##############################################
 mydataGB <- daily_returnsGB[, -which(names(daily_returnsGB) == "date")]
 
@@ -112,12 +112,12 @@ mydataCB <- daily_returnsCB[, -which(names(daily_returnsCB) == "date")]
 
 
 ##############################################
-## DISTRIBUZIONE RETURNS
+## DISTRIBUTION OF RETURNS
 ##############################################
 
 ## GREEN BOND
 xGRON <- as.numeric(mydataGB$GRON.MI)
-xGRON <- xGRON[is.finite(xGRON)]   # rimuove NA/Inf
+xGRON <- xGRON[is.finite(xGRON)]   
 
 hGRON <- hist(
   xGRON,
@@ -129,12 +129,12 @@ hGRON <- hist(
 
 plot(hGRON, freq = FALSE, border = FALSE,
      col = rgb(0.3,0.8,0.8,0.6),
-     main = "Distribuzione rendimenti GREEN BOND (GRON.MI)",
-     xlab = "Rendimento", ylab = "Probabilità per bin")
+     main = "Distribution returns GREEN BOND (GRON.MI)",
+     xlab = "Return", ylab = "probability for each bin")
 lines(density(xGRON), lwd = 2)
 
 
-## AZIONARIO (STOXX 600)
+## STOCKS (STOXX 600)
 xXSX6 <- as.numeric(mydataGB$XSX6.MI)
 xXSX6 <- xXSX6[is.finite(xXSX6)]
 
@@ -148,8 +148,8 @@ hXSX6 <- hist(
 
 plot(hXSX6, freq = FALSE, border = FALSE,
      col = rgb(0.3,0.8,0.8,0.6),
-     main = "Distribuzione rendimenti AZIONARIO (XSX6.MI)",
-     xlab = "Rendimento", ylab = "Probabilità per bin")
+     main = "Distribution returns AZIONARIO (XSX6.MI)",
+     xlab = "Return", ylab = "probability for each bin")
 lines(density(xXSX6), lwd = 2)
 
 
@@ -167,8 +167,8 @@ hIPRE <- hist(
 
 plot(hIPRE, freq = FALSE, border = FALSE,
      col = rgb(0.3,0.8,0.8,0.6),
-     main = "Distribuzione rendimenti REAL ESTATE (IPRE.DE)",
-     xlab = "Rendimento", ylab = "Probabilità per bin")
+     main = "Distribution returns REAL ESTATE (IPRE.DE)",
+     xlab = "Return", ylab = "probability for each bin")
 lines(density(xIPRE), lwd = 2)
 
 ## CORPORATE BONDS
@@ -185,24 +185,24 @@ hCB <- hist(
 
 plot(hCB, freq = FALSE, border = FALSE,
      col = rgb(0.3,0.8,0.8,0.6),
-     main = "Distribuzione rendimenti CORPORATE BONDS (IEAA.L)",
-     xlab = "Rendimento", ylab = "Probabilità per bin")
+     main = "Distribution returns CORPORATE BONDS (IEAA.L)",
+     xlab = "Return", ylab = "probability for each bin")
 lines(density(xCB), lwd = 2)
 
 
 ##############################################
-## COVARIANZA
+## COVARIANCE
 ##############################################
 
 
-COVARIANZAGB <- cov(mydataGB)
+COVARIANCEGB <- cov(mydataGB)
 print(COVARIANZAGB)
   
-COVARIANZACB <- cov(mydataCB)
-print(COVARIANZACB)
+COVARIANCECB <- cov(mydataCB)
+print(COVARIANCECB)
 
 ##############################################
-## RISK-FREE (CORRETTO) 
+## RISK-FREE 
 ##############################################
 KennethFrench <- read_xlsx("rf.xlsx")
 colnames(KennethFrench) <- c("date_raw", "Mkt_RF", "SMB", "HML", "RF")
@@ -221,7 +221,7 @@ diff_rf_vs_CB <- setdiff(rf$date_raw, daily_returnsCB$date)
 as.Date(diff_rf_vs_GB, origin = "1970-01-01")
 as.Date(diff_rf_vs_CB, origin = "1970-01-01")
 
-# Le date da rimuovere
+# Dates to delete
 dates_to_removeRF <- as.Date(c(
   "2021-06-01","2021-08-30","2021-12-24","2021-12-27","2021-12-28","2021-12-31","2022-01-03",
   "2022-04-15","2022-04-18","2022-05-02","2022-06-02","2022-06-03","2022-08-15","2022-08-29",
@@ -233,19 +233,17 @@ dates_to_removeRF <- as.Date(c(
   "2025-07-19","2025-07-20","2025-07-26","2025-07-27","2025-07-31"
 ))
 
-# Elimino date da RF
+# Delete dates for Rf
 rf_sync <- rf %>%
   filter(!date_raw %in% dates_to_removeRF)
 
-# Controlli corretti : nessuna di quelle date rimasta
-any(rf_sync$date_raw %in% dates_to_removeRF)   # deve dare FALSE
-nrow(rf_sync)                                  # dovrebbe essere 1042 se le date combaciano con GB
-
-
+# checking results 
+any(rf_sync$date_raw %in% dates_to_removeRF)   # should be FALSE
+nrow(rf_sync)                                  # should be 1042 
 
 
 ##############################################
-## DIMENSIONI
+## DIMENSIONS
 ##############################################
 
 n_assetGB <- ncol(mydataGB) 
@@ -253,21 +251,14 @@ n_assetCB <- ncol(mydataCB)
 
 library(nloptr)
 
-# Inizializzo liste per salvare i pesi provati
+# Creating lists to save the weights
 weight_historyGB <- list()
 weight_historyCB <- list()
 
 
 ##############################################
-## FUNZIONI SHARPE (CORRETTO)
+##  SHARPE RATIO FUNCTION
 ##############################################
-
-######################################################################################################################
-##al momento ho una matrice 1042 X 3 con i return di ogni giornata. con sweep sto facendo la moltiplicazione        ##
-##tra i return e il peso dei rispettivi asset, quindi esco con una nuova matrice 1042X3 con i return giornalieri    ##
-##secondo l'allocazione del peso su base giornaliera.rowsum somma i ritorni di tutti e 3                            ##
-##quindi forma un vettore con 1042 righe (1 per giornata) che è la somma dei return pesati                          ##
-######################################################################################################################
 
 
 sharpe_ratioGB <- function(w) {
@@ -289,7 +280,7 @@ sharpe_ratioCB <- function(w) {
 }
 
 ##############################################
-## VINCOLI (CORRETTO)
+## CONSTRAINTS
 ##############################################
 constraint_eq <- function(w) {
   return(sum(w) - 1)
@@ -304,7 +295,7 @@ initial_weightsGB <- rep(1 / n_assetGB, n_assetGB)
 initial_weightsCB <- rep(1 / n_assetCB, n_assetCB)
 
 ##############################################
-## OTTIMIZZAZIONE
+## OPTIMIZATION
 ##############################################
 opt_resultGB <- nloptr(
   x0 = initial_weightsGB, 
@@ -325,14 +316,14 @@ opt_resultCB <- nloptr(
 )
 
 ##############################################
-## RISULTATI
+## RESULTS
 ##############################################
-# Disattiva notazione scientifica
-options(scipen = 999, digits = 10)  # niente notazione scientifica, 10 cifre totali
+# No scientific notation  
+options(scipen = 999, digits = 10)  
 
 
-w_GB      <- opt_resultGB$solution         # pesi ottimali (vettore)
-sharpe_GB <- -opt_resultGB$objective       # Sharpe ottimizzato
+w_GB      <- opt_resultGB$solution         
+sharpe_GB <- -opt_resultGB$objective       
 w_CB      <- opt_resultCB$solution
 sharpe_CB <- -opt_resultCB$objective
 
@@ -343,20 +334,20 @@ cat("Sharpe CB:", sharpe_CB, "\n")
 
 
 
-# OPPURE
+# OR
 
-# Definizione ticker
+# Defining tickers
 ETF_GB <- c("GRON.MI","IPRE.DE", "XSX6.MI")
 ETF_CB <- c("IEAA.L","IPRE.DE", "XSX6.MI")
 
-# Stampa GB
+# Print GB
 cat("GB Portfolio:\n")
 for (i in seq_along(ETF_GB)) {
   cat(ETF_GB[i], ":", round(w_GB[i], 4), "\n")
 }
 cat("Sharpe GB:", sharpe_GB, "\n\n")
 
-# Stampa CB
+# Print CB
 cat("CB Portfolio:\n")
 for (i in seq_along(ETF_CB)) {
   cat(ETF_CB[i], ":", round(w_CB[i], 4), "\n")
@@ -366,28 +357,24 @@ cat("Sharpe CB:", sharpe_CB, "\n")
 
 
 
-###################################################################################################
-##la soluzione è una corner solution, l'obiettivo principale posto nel problema è stato ottenere ##
-##un alto sharpe ratio e non diversificare il portafoglio. In questo periodo storico questi      ##
-##due obiettivi sembrano incompatibili ed è tutto allocato sul REIT                              ##
-###################################################################################################
+##########################################################################################################
+##We have a corner solution, the reason behind it is linked with the overperformance of stick markets ####
+## in the time frame analyzed and the objective of Sharpe ratio: minimizing the risk maximizing return.###
+##########################################################################################################
 
 
 ##############################################
-## ANDANDO PER MESI 
+## MONTHLY STRATEGY REALLOCATION
 ##############################################
 
 
 
-#raggruppa i return in base al mese
+#group returns by month
 daily_returnsGB$month <- floor_date(daily_returnsGB$date, "month")
 daily_returnsCB$month <- floor_date(daily_returnsCB$date, "month")
 
-rf_sync$date_raw  <- as.Date(rf_sync$date_raw)   # se non è già di classe Date
+rf_sync$date_raw  <- as.Date(rf_sync$date_raw)   
 rf_sync$month <- floor_date(rf_sync$date_raw, "month")
-
-
-#tiene lista dello storico
 monthly_resultsGB <- list()
 monthly_resultsCB <- list()
 
@@ -418,7 +405,7 @@ for (m in unique(daily_returnsGB$month)) {
   )
   
   monthly_resultsGB[[length(monthly_resultsGB) + 1]] <- data.frame(
-    Month = as.Date(m),  # 🔹 Manteniamo Date qui
+    Month = as.Date(m),  
     XSX6.MI = opt_m$solution[1],
     GRON.MI = opt_m$solution[2],
     IPRE.DE  = opt_m$solution[3],
@@ -427,23 +414,23 @@ for (m in unique(daily_returnsGB$month)) {
 }
 
 
-# Combino in unico dataset wide
+# Merge into a single dataset wide
 monthly_results_dfGB <- bind_rows(monthly_resultsGB)
 
-# 🔹 Ora formatto in "YYYY-MM"
+# Formatting by "YYYY-MM"
 monthly_results_dfGB <- monthly_results_dfGB %>%
   mutate(Month = format(Month, "%Y-%m"))
 
-# 🔹 Arrotondo i pesi e lo Sharpe
+# Round results 
 monthly_results_dfGB <- monthly_results_dfGB %>%
   mutate(across(c(XSX6.MI, GRON.MI, IPRE.DE, Sharpe),
                 ~ round(., 4)))
 
-# Visualizzo tabella finale
+# Visualize final table
 View(monthly_results_dfGB)
 print(monthly_results_dfGB)
 
-############ CON IL PORTAFOGLIO CB#########
+############ WITH CB PORTFOLIO#########
 for (m in unique(daily_returnsCB$month)) {
   
   monthly_dataCB <- daily_returnsCB %>%
@@ -470,7 +457,7 @@ for (m in unique(daily_returnsCB$month)) {
   )
   
   monthly_resultsCB[[length(monthly_resultsCB) + 1]] <- data.frame(
-    Month = as.Date(m),  # 🔹 Manteniamo Date qui
+    Month = as.Date(m),  
     XSX6.MI = opt_mCB$solution[1],
     IEAA.L = opt_mCB$solution[2],
     IPRE.DE  = opt_mCB$solution[3],
@@ -478,87 +465,59 @@ for (m in unique(daily_returnsCB$month)) {
   )
 }
 
-# Combino in unico dataset wide
+# Merge in a single dataset wide
 monthly_results_dfCB <- bind_rows(monthly_resultsCB)
 
-# 🔹 Ora formatto in "YYYY-MM"
+# Format as "YYYY-MM"
 monthly_results_dfCB <- monthly_results_dfCB %>%
   mutate(Month = format(Month, "%Y-%m"))
 
-# 🔹 Arrotondo i pesi e lo Sharpe
+# Round weights
 monthly_results_dfCB <- monthly_results_dfCB %>%
   mutate(across(c(XSX6.MI, IEAA.L, IPRE.DE, Sharpe),
                 ~ round(., 4)))
 
-# Visualizzo tabella finale
+# View final summary table
 View(monthly_results_dfCB)
 print(monthly_results_dfCB)
 
-
-###############################################################################################
-## Ho notato stesso sharpe ratio e dallocazione identica negli ultimi 3 mesi del 2025.       ##
-##Per controllare sviluppo una stringa che confronta i rendimenti in quei mesi per vederne le##
-##similutidini possibili.                                                                    ##
-###############################################################################################
-
-##a giugno 2025 vicino allo zero o negativo nel caso CB quindi simile a GB##
+##Look into details the Sharpe ratio results on a monthly basis ##
 
 
 monthly_results_dfGB$Vol <- sapply(monthly_results_dfGB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsGB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month) %>%
     as.matrix()
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_dfGB[monthly_results_dfGB$Month == m, c("XSX6.MI","GRON.MI","IPRE.DE")])
-  
   sd(as.numeric(X %*% w), na.rm = TRUE)
 })
 
 monthly_results_dfGB$MeanRet <- sapply(monthly_results_dfGB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsGB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month)
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_dfGB[monthly_results_dfGB$Month == m,
                                        c("XSX6.MI","GRON.MI","IPRE.DE")])
-  
-  # calcolo rendimenti giornalieri del portafoglio e poi la media
   port <- as.numeric(as.matrix(X) %*% w)
   mean(port, na.rm = TRUE)
 })
-
-# Volatilità mensile CB
 monthly_results_dfCB$Vol <- sapply(monthly_results_dfCB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsCB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month) %>%
     as.matrix()
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_dfCB[monthly_results_dfCB$Month == m,
                                        c("XSX6.MI","IEAA.L","IPRE.DE")])
   
   sd(as.numeric(X %*% w), na.rm = TRUE)
 })
-
-# Media rendimenti giornalieri mensili CB
 monthly_results_dfCB$MeanRet <- sapply(monthly_results_dfCB$Month, function(m) {
-  # prendo i rendimenti giornalieri di quel mese
   X <- daily_returnsCB %>%
     filter(floor_date(date, "month") == as.Date(paste0(m, "-01"))) %>%
     select(-date, -month)
-  
-  # prendo i pesi stimati per quel mese
   w <- as.numeric(monthly_results_dfCB[monthly_results_dfCB$Month == m,
                                        c("XSX6.MI","IEAA.L","IPRE.DE")])
-  
-  # calcolo rendimenti giornalieri del portafoglio e poi la media
   port <- as.numeric(as.matrix(X) %*% w)
   mean(port, na.rm = TRUE)
 })
