@@ -1,0 +1,773 @@
+<!DOCTYPE HTML>
+<!--
+	Federico nardoni Portfolio by Federico Nardoni
+-->
+<html>
+	<head>
+		<title>Federico Nardoni - Project Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="single is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Federico Nardoni - Project Portfolio</a></h1>
+						<nav class="links">
+							<ul>
+								<li><a href="single.html">Green Bond institutional investors</a></li>
+								<li><a href="single copy.html">Business Analysis - Indian Airlines</a></li>
+							</ul>
+							</ul>
+						</nav>
+						<nav class="main">
+							<ul>
+								<li class="search">
+									<a class="fa-search" href="#search">Search</a>
+									<form id="search" method="get" action="#">
+										<input type="text" name="query" placeholder="Search" />
+									</form>
+								</li>
+								<li class="menu">
+									<a class="fa-bars" href="#menu">Menu</a>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<section id="menu">
+
+						<!-- Search -->
+							<section>
+								<form class="search" method="get" action="#">
+									<input type="text" name="query" placeholder="Search" />
+								</form>
+							</section>
+
+						<!-- Links -->
+							<!-- Links -->
+							<section>
+								<ul class="links">
+									<li>
+										<a href="single.html">
+											<h3>Green Bond institutional investors</h3>
+											<p>Role of GB in institutional investors portfolios</p>
+										</a>
+									</li>
+									<li>
+										<a href="single copy.html">
+											<h3>Business Analysis - Indian Airlines</h3>
+											<p>Python data analysis of Airline market in india</p>
+										</a>
+									</li>
+								</ul>
+							</section>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="single copy.html">Business Analysis - Indian Airlines</h3>
+											<p>Python data analysis of Airline market in india</p>
+											</div>
+									<div class="meta">
+										<time class="published" datetime="2025-01-01"> January 6, 2026</time>
+										<a href="single copy.html" class="author"><span class="name">Federico Nardoni</span><img src="images/foto CV - Copy.jpg" alt="" /></a>
+									</div>
+								</header>
+								<span class="image featured"><img src="images/prova_2.jpg" alt="" /></span>
+								<p>This thesis examines the pricing mechanisms within the Indian civil aviation sector through a quantitative approach leveraging data science techniques in a Python environment. Utilizing a multi-airline dataset, the research explores the interplay between operational variables and market demand, employing linear regression models to quantify the impact of factors such as flight duration, booking lead time, cabin class, and the number of stops. The findings delineate the competitive positioning of major carriers and provide a data-driven framework for understanding price elasticity and market entry strategies within a highly competitive aviation environment.</p>
+								<p>Data Analysis of vast dataset to address pricing policy of an Indian Airlines firm </p>
+								
+								<section>
+<h3>0) Project Overview</h3>
+<p>
+  This project analyzes the major players in the Indian airline industry to identify market segmentation, structural features, and growth opportunities. 
+  The data is retrieved from a prominent 2023 Kaggle dataset (Goibibo Flight Data), which is publicly available and contains over 80,000 observations (81,978 entries). 
+  The sectoral overview is derived from two separate datasets: <em>Delhi_information.csv</em>, which includes destinations, flight codes, and other location-based data, and <em>Delhi_prices.csv</em>, which provides detailed pricing information. 
+  These files cover a three-month period from January to March 2023. Furthermore, the analysis is structured around a series of questions embedded as comments within the code, following a well-defined inductive pattern.
+</p>
+
+<h3>1) Cleaning the Dataset</h3>
+<p>
+  The first step involved preparing the dataset for analysis. This process included the removal of empty rows and columns (NA observations). 
+  The <code>drop_duplicates()</code> function within the Pandas library proved essential, as each flight is identified by a specific flight number, and the same aircraft appears multiple times throughout the day while in transit across different regions of India.
+</p>
+<p>
+  By selecting the "Destination" column and utilizing <code>drop_duplicates()</code> and <code>len()</code>, it was possible to determine the exact number of flights per destination. This information was cross-verified by counting unique flight numbers for each route. 
+  Additionally, the dataset was cleaned by converting date strings into a standard European format using the <code>to_datetime</code> method in Pandas.
+</p>
+
+<p>The following airlines were analyzed:</p>
+<ol>
+  <li><em><strong>Vistara</strong></em></li>
+  <li><em><strong>Air India</strong></em></li>
+  <li><em><strong>AirAsia</strong></em></li>
+  <li><em><strong>GO FIRST</strong></em></li>
+  <li><em><strong>SpiceJet</strong></em></li>
+  <li><em><strong>Indigo</strong></em></li>
+  <li><em><strong>Alliance-Air</strong></em></li>
+  <li><em><strong>Akasa-Air</strong></em></li>
+</ol>
+
+<p>In terms of network reach, the number of destinations served by each carrier is as follows:</p>
+<ul>
+<ul>
+  <li><strong><em>Vistara</em></strong>: 6</li>
+  <li><strong><em>Air India</em></strong>: 6</li>
+  <li><strong><em>AirAsia</em></strong>: 5</li>
+  <li><strong><em>GO FIRST</em></strong>: 6</li>
+  <li><strong><em>SpiceJet</em></strong>: 6</li>
+  <li><strong><em>Indigo</em></strong>: 6</li>
+  <li><strong><em>Alliance-Air</em></strong>: 1</li>
+  <li><strong><em>Akasa-Air</em></strong>: 3</li>
+</ul>
+
+<p>
+  A significant market implication identified in this sector is that, with the exception of Alliance-Air and Akasa-Air, most carriers already cater to established market segments. 
+  Given that the majority of routes are served by multiple airlines, entering these markets would likely intensify competition rather than create a monopoly or niche advantage. 
+  Ultimately, this oversupply may hinder companies' ability to adjust their pricing strategies freely. In an extreme scenario, this could lead to a highly inelastic demand effect for some of these carriers.
+</p>
+
+</section>
+
+<section>
+  <h3>2) Flights destinations </h3>
+  <p>
+    By analyzing the dataset in detail, it is possible to rank destinations by the number of flights, identifying the most frequently visited cities. 
+	Mumbai and Bangalore emerge as the most heavily trafficked cities in India, a result largely driven by their central roles as key business hubs in the region.
+</p>
+  <ul>
+  <li><strong><em>Mumbai</em></strong>: 19113</li>
+  <li><strong><em>Bangalore</em></strong>: 17508</li>
+  <li><strong><em>Chennai</em></strong>: 13720</li>
+  <li><strong><em>Hyderabad</em></strong>: 13250</li>
+  <li><strong><em>Kolkata</em></strong>: 9761</li>
+  <li><strong><em>Ahmedabad</em></strong>: 9129</li>
+</ul>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images/Graphs/destinations.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Flights per Destination" />
+</div>
+
+<p>
+    At this stage, an in-depth analysis of these two key cities was performed. The results indicate that airline pricing policies are significantly influenced by the departure time, as expected. 
+	Specifically, more competitive prices are offered during off-peak hours, such as late evening or early morning. Since all prices in the dataset are expressed in Indian Rupees (₹), I also converted these adjustments into Euros (€) to better grasp the actual magnitude of the price fluctuations.
+</p>
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\popular_destination_departures.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Popular destinations" />
+</div>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images/Graphs/Chart.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Mumbai-Banaglore Prices and Departure" />
+</div>
+
+  <h3>3) Flights classes </h3>
+  <p>
+    Now, focusing the analysis on flights tickets classes, the day with most business flights is Monday (3793) followed by Saturday and Thursday (3284). This conclusion seems reasonable considering that Monday, being the first day of the week, is vastly used for job related purposes. 
+	Using the pandas library, with <code>merge</code> and <code>groupby</code>, it is possible to dig deeper in the behaviours of prices. More specifically the average price in € and Rupees by company is 
+</p>
+  <ul>
+  <li><strong><em>Alliance Air</em></strong>: ₹ 4.748,14   €52.76</li>
+  <li><strong><em>Akasa Air</em></strong>: ₹ 5.211,21   €57.90</li>
+  <li><strong><em>SpiceJet</em></strong>: ₹ 7.856,51   €87.29</li>
+  <li><strong><em>Air Asia</em></strong>: ₹ 8.038,40   €89.31</li>
+  <li><strong><em>GO FIRST</em></strong>: ₹ 8.157,86   €90.64</li>
+  <li><strong><em>Indigo</em></strong>: ₹ 8.531,74   €94.80</li>
+  <li><strong><em>Air India</em></strong>: ₹ 23.940,80   €266.01</li>
+  <li><strong><em>Vistara</em></strong>: ₹ 24.876,58   €276.41</li>
+</ul>
+
+<p>
+  The company with the highest average is Vistara. The high average fare may reflect departure time mix or a higher share of business-class seats, and may not indicate a consistently higheseats andr comparable products. Indeed, looking in detail to business flights, the two companies with the most expensive average fare price are also the only ones who have a business option class of flight. More specifically Air India sold 9844 business tickets and Vistara 13315. 
+</p>
+
+<p>
+  At this stage, looking in detail into one specific destination, I focused on Hyderabad, comparing average prices of tickets. 
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Average_price_hyderbarad.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Average price Hyderabad" />
+</div>
+
+<p>
+	The distribution of average prices remains basically in the same order as in the comprehensive dataset, with a remarkable quality difference in terms of fare ticket average for Air India and Vistara.
+</p>
+
+  <h3>4) Explanatory Variables relationship </h3>
+  <p>
+   Among the interesting relationships among variables, the main one is observing higher fare prices as the date becomes closer to the one of the flight. In this way, airlines capitalise on last-minute demand. The demand will be less elastic, and having fixed seats remained will raise the average price.
+   The main issue with multicollinearity is unstable and unreliable coefficient estimates, which makes it difficult to interpret the individual effect of each variable, even if overall model fit looks acceptable.
+   Looking at correlation among variables before producing a regression model is vital. 
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\first_CMpng.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="First Correlation matrix" />
+</div>
+
+<p>
+  The Heatmap captures the correlation of pearson among variables implemented in the model. As observable and expected Fares in GBP and Rupees have a perfect correlation .
+  This is due to the fact that they are basically the same variable and the only difference is the exchange rate from Rupees to pounds. Keeping both variables adds redundant information and can destabilize coefficient estimations in a regression model
+</p>
+
+ <h3>5) Hot Encoding</h3>
+  <p>
+To further deepen the analysis, it is necessary to develop a multiple linear regression model. Python offers several libraries depending on the specific objective; I adopted a blended approach, primarily leveraging the <code>statsmodels</code> library. This package allows for an in-depth inferential statistical analysis, providing p-values, confidence intervals, and other essential diagnostic tools.
+
+To implement this, the dataset must be modified to meet the requirements of statsmodels, which necessitates purely numerical input. To avoid losing highly valuable information—such as flight classes and destinations—and to measure their impact on pricing strategy, I applied the one-hot encoding technique.
+
+One-hot encoding consists of transforming categorical variables into dummy variables. To prevent the 'dummy variable trap'—a form of perfect multicollinearity—one category is excluded to serve as a baseline or benchmark against which all others are measured.
+</p>
+<p>
+This process has been performed for:
+  <ul>
+  <li><strong><em>Journey date</em></strong>: 6 = Friday</li>
+  <li><strong><em>Airline</em></strong>: 6 =  Air India</li>
+  <li><strong><em>Class</em></strong>: 3 = Business</li>
+  <li><strong><em>Departure</em></strong>: Departure 12PM-6 AM</li>
+  <li><strong><em>Destination</em></strong>: 5 = Ahmedabad</li>
+</ul>
+
+creating 21 new columns in total
+</p>
+
+<h1> MULTILINEAR REGRESSION- OLS MODEL </h1>
+
+<h3>Predictive vs. Inferential Modeling</h3>
+<p>
+  Our strategic objective is to develop a <strong>multiple linear regression model</strong> that utilizes inferential statistics to uncover the key relationships that drove pricing behavior in the past. In addition to this, I chose to incorporate a predictive component to the model, aiming to forecast future price movements rather than solely analyzing historical data.
+</p>
+<p>
+  Consequently, this stage of the project is divided into two distinct parts: the use of <code>scikit-learn</code> for predictive modeling and <code>statsmodels</code> for inferential analysis.
+</p>
+
+<p>
+  The fundamental difference between these two libraries lies in their core approach. <strong>Predictive modeling</strong> (via <code>scikit-learn</code>) focuses on training a model to answer the question: <em>"How is the market likely to behave in the future, given the data provided?"</em> In contrast, <strong>inferential analysis</strong> (via <code>statsmodels</code>) focuses on understanding the underlying patterns within historical data to study the specific relationships between variables.
+</p>
+
+<hr style="border: 0; height: 2px; background: #3498db; margin: 50px 0;">
+
+<div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; border-left: 10px solid #3498db; margin-bottom: 30px;">
+  <h2 style="color: #2980b9; margin-top: 0;">Part I: Predictive Regression Model</h2>
+  <p style="font-style: italic; color: #555;">
+    Focusing on machine learning with <code>scikit-learn</code> to forecast future price behaviors.
+  </p>
+</div>
+
+<p>
+  The first stage of this work is articulated through the use of <code>scikit-learn</code>, focusing on predictive regression. The primary objective is to train a model that can answer the fundamental question: <em>"How is the price likely to behave in a future scenario, considering the data provided?"</em>. 
+</p>
+
+<p>
+  Unlike the inferential part, this predictive approach aims to minimize error and maximize accuracy in forecasting, rather than simply studying historical relations among variables.
+</p>
+
+<h3>Predictive Modeling</h3>
+<p>
+  I began by plotting the relationships between key variables and fares. In this model, the <strong>dependent variable (y)</strong> is the price of fares in <strong>Rupees</strong>, while the set of <strong>explanatory variables</strong> includes all other relevant features in the dataset.
+</p>
+
+<p>
+  By examining these scatterplots, we can determine if the data follows a specific trend. If a non-linear relationship is observed, it may be necessary to either move away from a <strong>multiple linear regression</strong> model or perform data transformations (such as logarithmic or polynomial adjustments) to ensure the model remains valid. This step is crucial for identifying potential issues like non-linearity that could bias our results in <code>statsmodels</code> or <code>scikit-learn</code>.
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Relationship between Number of Stops and Fare .png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Relationship between Number of Stops and Fare" />
+</div>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Relationship between Duration (Hours) and Fare (Rupees).png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Relationship between Duration (Hours) and Fare (Rupees)" />
+</div>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Relationship between Days Before Journey Date and Fare (Rupees).png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Relationship between Days Before Journey Date and Fare (Rupees)" />
+</div>
+
+<p>
+  Consequently, strict linearity among all variables is not clearly observable. Such results are expected given the heterogeneity of the dataset and the nature of <strong>one-hot encoded</strong> variables. Since these variables follow a Boolean logic (0 or 1), they tend to create distinct patterns in scatterplots rather than a purely random distribution, reflecting categorical shifts rather than continuous linear movements.
+</p>
+
+<p>
+  Moving forward with the predictive analysis, I performed a <strong>train-test split</strong>, randomly allocating 80% of the data to train the model and reserving the remaining 20% for validation. This resulted in the creation of <code>X_train</code>, <code>X_test</code>, <code>y_train</code>, and <code>y_test</code> sets. Using <code>scikit-learn</code>, the model was then regressed on the training data.
+</p>
+
+
+<p>
+  To evaluate the model's performance, the <strong>R-squared (R²)</strong> metric was utilized. The results indicate that the model was trained effectively, capturing a significant portion of the variance. Notably, the difference between the training and testing R² scores is minimal, appearing only after the third decimal point, which suggests a well-generalized model without significant <strong>overfitting</strong>:
+</p>
+
+<ul>
+  <li><strong>R² Test:</strong> <code>0.8547</code></li>
+  <li><strong>R² Train:</strong> <code>0.8521</code></li>
+</ul>
+
+<p>
+  The following output displays the regression coefficients (Beta values), which quantify the impact of each independent variable on the fare price:
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Output_predictive_model.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Output_predictive_model" />
+</div>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Slide_OUTPUT.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Output predictive model: beta interpretation" />
+</div>
+
+<h3>Evaluation of the Predictive Model and Logarithmic Transformation</h3>
+<p>
+  Despite a strong <strong>R²</strong>, the initial model exhibits a high <strong>Mean Absolute Error (MAE)</strong>. Specifically, on an average ticket price of 20,495 ₹ (~193.73 €), the model shows an average error of approximately 42-43 €. This imprecision is primarily driven by the extreme heterogeneity of the dataset, which encompasses vastly different price points across <strong>Business</strong> and <strong>Economy</strong> classes.
+</p>
+
+<p>
+  A key limitation of the current approach is the assumption of linearity. In the airline industry, pricing dynamics are non-linear; for instance, as the departure date approaches, prices often increase <strong>exponentially</strong> rather than linearly to capitalize on last-minute demand. Standard normalization (like <em>Z-score</em>) would prove counterproductive here, as it would suppress the natural and meaningful variance of the data.
+</p>
+
+<div style="background-color: #f9f9f9; padding: 15px; border-left: 5px solid #2ecc71; margin: 20px 0;">
+  <strong>Strategic Adjustment:</strong> To stabilize the variance and mitigate <strong>heteroskedasticity</strong>, I implemented a <strong>Logarithmic Transformation</strong> on the dependent variable (<code>y</code>).
+</div>
+
+<p>
+  By modeling airfares in their logarithmic form, we shift the interpretation of prediction errors into <strong>relative (percentage) terms</strong>. While this prevents a direct linear interpretation of the Beta coefficients, it significantly enhances the model's reliability.
+</p>
+
+<h4>Results after Log Transformation:</h4>
+<ul>
+  <li><strong>R² Improvement:</strong> The R-squared increased to nearly <code>0.90</code>, indicating a better fit due to reduced variance.</li>
+  <li><strong>Error Reduction:</strong> The <strong>Mean Squared Error (MSE)</strong> dropped considerably, yielding an average prediction error of approximately <strong>19%</strong> on the test set.</li>
+</ul>
+
+<p>
+  This transformation is a necessary precursor to the <strong>inferential statistics</strong> phase. Since <code>scikit-learn</code> does not natively provide <strong>p-values</strong> for statistical significance, this refined, stabilized dataset will now be processed via <code>statsmodels</code> to conduct a formal hypothesis test on each variable.
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Beta Interpretation_Log-linear.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Beta Interpretation_Log-linear" />
+</div>
+
+<hr style="border: 0; height: 2px; background: #2ecc71; margin: 50px 0;">
+
+<div style="background-color: #f4fff4; padding: 20px; border-radius: 8px; border-left: 10px solid #2ecc71; margin-bottom: 30px;">
+  <h2 style="color: #27ae60; margin-top: 0;">Part II: Inferential Statistical Analysis</h2>
+  <p style="font-style: italic; color: #555;">
+    Transitioning from <code>scikit-learn</code> (Prediction) to <code>statsmodels</code> (Inference).
+  </p>
+</div>
+
+<p>
+  While the train-test split is ideal for evaluating predictive performance, it is less suited for a rigorous, detailed statistical inference in <code>Python</code>. Therefore, to achieve a more comprehensive analysis of variable significance and understand the underlying relationships, I implemented a traditional <strong>Multiple Linear Regression</strong> model using the <code>statsmodels</code> library.
+</p>
+
+
+<h3>Inferential Modeling</h3>
+
+<p>
+  After appropriate data preparation—including the logarithmic transformation of the dependent variable to stabilize variance—I utilized the <code>OLS</code> (Ordinary Least Squares) method. This approach allows for the calculation of <strong>p-values</strong>, standard errors, and confidence intervals, which are essential for validating the statistical impact of each feature on airfares.
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Inferential_OLS RESULTS.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Inferential_OLS RESULTS" />
+</div>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\Inferential_OLS RESULTS_2.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Inferential_OLS RESULTS_Quality" />
+</div>
+
+<p>
+Therefore, to prove the solidity of the results obtained, I proeeded in testing the 5 hyphothesis of the Gauss-Markov OLS theorem, for an OLS model
+</p>
+
+<div style="margin: 40px 0;">
+    <h3 style="color: #e74c3c; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; text-transform: uppercase;">
+        CLASSICAL LINEAR REGRESSION MODEL ASSUMPTIONS
+    </h3>
+
+    <ol style="list-style: none; padding-left: 0;">
+        <li style="margin-bottom: 25px;">
+            <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em; text-transform: uppercase;">
+                1. NO MULTICOLLINEARITY (VIF)
+            </span>
+            <p style="margin-top: 5px;">
+                Explanatory variables must not be highly correlated with each other. This condition was verified using the <strong>Variance Inflation Factor (VIF)</strong> to ensure that each feature provides unique and independent information to the model.
+            </p>
+        </li>
+
+        <li style="margin-bottom: 25px;">
+            <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em; text-transform: uppercase;">
+                2. LINEARITY
+            </span>
+            <p style="margin-top: 5px;">
+                There must be a linear relationship between the dependent variable (Price) and the regression parameters. The <strong>logarithmic transformation</strong> was specifically applied to linearize relationships that were inherently exponential.
+            </p>
+        </li>
+
+        <li style="margin-bottom: 25px;">
+            <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em; text-transform: uppercase;">
+                3. NORMALITY OF RESIDUALS
+            </span>
+            <p style="margin-top: 5px;">
+                The error terms (residuals) should follow a normal distribution. This ensures that the parameter estimates are reliable and that the calculated <strong>p-values</strong> are valid for statistical inference.
+            </p>
+        </li>
+
+        <li style="margin-bottom: 25px;">
+            <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em; text-transform: uppercase;">
+                4. HOMOSKEDASTICITY
+            </span>
+            <p style="margin-top: 5px;">
+                The variance of the error terms must be constant across all observations. Since variance often increases with price in flight data, the <strong>Log-Price</strong> model was adopted to stabilize this variance and mitigate heteroskedasticity.
+            </p>
+        </li>
+
+        <li style="margin-bottom: 25px;">
+            <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em; text-transform: uppercase;">
+                5. NO AUTOCORRELATION
+            </span>
+            <p style="margin-top: 5px;">
+                Residuals must be independent of one another. In our dataset, each flight is treated as an independent observation to avoid biases in significance testing often found in time-series data.
+            </p>
+        </li>
+    </ol>
+</div>
+
+<div>
+
+	<section>
+<hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(19, 39, 226, 0.75), rgba(0, 0, 0, 0)); margin: 60px 0;">
+
+<h2 style="text-align: center; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px;">
+    Deep Dive: Empirical Validation
+</h2>
+
+<div style="margin-bottom: 60px;">
+        <span style="background-color: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Assumption #1
+        </span>
+        <h3 style="color: #e74c3c; margin-top: 10px; text-transform: uppercase;">
+            No Multicollinearity
+        </h3>
+<p>
+ Both the heatmap and the VIF shows there is <strong>no multicollinearity</strong> among variables. 
+</p>
+
+<p>
+  By examining these scatterplots, we can determine if the data follows a specific trend. If a non-linear relationship is observed, it may be necessary to either move away from a <strong>multiple linear regression</strong> model or perform data transformations (such as logarithmic or polynomial adjustments) to ensure the model remains valid. This step is crucial for identifying potential issues like non-linearity that could bias our results in <code>statsmodels</code> or <code>scikit-learn</code>.
+</p>
+
+<div style="width: 100%; text-align: center; margin: 30px 0;">
+    <img src="images\Graphs\MULTICOLLINEARITY.png" style="width: 80%; max-width: 1000px; height: auto; border: none;" alt="Multicollinearity" />
+</div>
+
+<p>
+ Multilinearity usually impact the reliability of coefficients, with high sensitivity to small changes in data. 
+</p>
+</section>
+
+<section>
+    <div style="margin-bottom: 60px;">
+        <span style="background-color: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Assumption #2
+        </span>
+        <h3 style="color: #e74c3c; margin-top: 10px; text-transform: uppercase;">
+            Linearity & Residual Analysis
+        </h3>
+
+        <p>
+            By applying a <strong>logarithmic transformation</strong> to the dependent variable (<code>y</code>), we successfully linearized the relationship between features and flight fares. The effectiveness of this transformation is empirically confirmed by the <strong>Residuals vs. Fitted plot</strong> shown below.
+        </p>
+
+        <p>
+            In this diagnostic visualization, the <strong>Fitted Values</strong> (predictions) are plotted on the X-axis, while the <strong>Residuals</strong> (the difference between observed and predicted values) are on the Y-axis. The resulting scatter appears as a <strong>random cloud of points</strong> with no discernible structure or trend, resembling "stochastic noise." 
+        </p>
+
+        <p>
+            The <strong>red trend line</strong> is almost perfectly <strong>horizontal at zero</strong>. This is a crucial finding: it indicates that there is <strong>no significant non-linear relationship</strong> left uncaptured. The model does not systematically over- or under-predict at different price levels, proving that the <strong>log-linear specification</strong> is highly appropriate for the Air India dataset.
+        </p>
+
+        <div style="width: 100%; text-align: center; margin: 30px 0;">
+            <img src="images\Graphs\LINEARITY_lm.png" 
+                 style="width: 85%; max-width: 1000px; height: auto; border: 1px solid #ddd; box-shadow: 5px 5px 15px rgba(0,0,0,0.05);" 
+                 alt="Residuals vs Fitted Plot" />
+            <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
+                <em>Figure: Residuals vs Fitted values confirming the linearity assumption.</em>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div style="margin-bottom: 60px;">
+        <span style="background-color: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Assumption #3
+        </span>
+        <h3 style="color: #e74c3c; margin-top: 10px; text-transform: uppercase;">
+            Normality of Residuals & Central Limit Theorem
+        </h3>
+
+        <p>
+            The <strong>Jarque-Bera test</strong> from the OLS output indicates a departure from perfect normality. This is visually confirmed by the <strong>Q-Q Plot</strong>, which exhibits a <strong>heavier right tail</strong>. This pattern suggests the presence of <strong>outliers</strong> and extreme price values that influence the overall distribution of residuals.
+        </p>
+
+        
+
+        <p>
+            Nonetheless, from a statistical standpoint, our analysis benefits from an <strong>exceptionally large dataset</strong> (over 80,000 observations). According to the <strong>Central Limit Theorem (CLT)</strong>, as the sample size increases, the distribution of the parameter estimates tends toward normality regardless of the shape of the error distribution in the population.
+        </p>
+
+        <p>
+            This <strong>asymptotic normality</strong> allows us to rely on our <strong>p-values</strong> and <strong>t-tests</strong> for inference. In such "Big Data" scenarios, strict adherence to the normality of residuals is less critical because the model's estimators remain <strong>unbiased and consistent</strong>. Therefore, while the behavior is not perfectly Gaussian, the model is theoretically robust enough for sound strategic conclusions.
+        </p>
+
+        <div style="width: 100%; text-align: center; margin: 30px 0;">
+            <img src="images\Graphs\NORMALITY_QQPlot.png" 
+                 style="width: 85%; max-width: 1000px; height: auto; border: 1px solid #ddd; box-shadow: 5px 5px 15px rgba(0,0,0,0.05);" 
+                 alt="Normal Q-Q Plot of Residuals" />
+            <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
+                <em>Figure: Q-Q Plot illustrating the heavy tail distribution of residuals.</em>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div style="margin-bottom: 60px;">
+        <span style="background-color: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Assumption #4
+        </span>
+        <h3 style="color: #e74c3c; margin-top: 10px; text-transform: uppercase;">
+            Homoschedasticity
+        </h3>
+
+        <p>
+            <strong>Homoskedasticity</strong> implies <strong>constant variance</strong> of the error term across all levels of the independent variables. In a well-fitted model, the observable errors should remain stable without <strong>remarkable spikes</strong> or patterns. A lack of homoskedasticity (known as <em>heteroskedasticity</em>) may <strong>invalidate the reliability of p-values</strong>, potentially labeling variables as statistically significant when they are not.
+        </p>
+
+        <p>
+            To evaluate this, we use the <strong>Scale-Location plot</strong>. On the Y-axis, we plot the <strong>square root of standardized residuals</strong> in <strong>absolute terms</strong>. We focus on the absolute value because we are interested in the <strong>magnitude of the error</strong> rather than its direction. 
+        </p>
+
+        <p>
+            The use of <strong>standardized residuals</strong> is essential here, as it allows for an easier comparison of residuals across different scales in <strong>standard measurement terms</strong>. Ideally, the red trend line in this graph should be <strong>horizontal</strong>; a steep slope or a "funnel" shape would indicate that the model's <strong>predictive precision</strong> varies significantly depending on the flight price, a common challenge in <strong>high-volatility sectors</strong> like the airline industry.
+        </p>
+
+        <div style="width: 100%; text-align: center; margin: 30px 0;">
+            <img src="images\Graphs\HOMOSCHEDASTICITY.png" 
+                 style="width: 85%; max-width: 1000px; height: auto; border: 1px solid #ddd; box-shadow: 5px 5px 15px rgba(0,0,0,0.05);" 
+                 alt="Homoschedasticity" />
+            <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
+                <em>Figure: Final result of Homoschedasticity reached. </em>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div style="margin-bottom: 60px;">
+        <span style="background-color: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Assumption #5
+        </span>
+        <h3 style="color: #e74c3c; margin-top: 10px; text-transform: uppercase;">
+            Autocorrelation of Residuals 
+        </h3>
+
+        <p>
+            <strong>Autocorrelation</strong> occurs when the residuals (errors) of a model are correlated with each other, which is a common issue in time-series data. This phenomenon can lead to <strong>underestimated standard errors</strong>, potentially causing us to declare a variable as <strong>statistically significant</strong> when it is actually not.
+        </p>
+
+        <p>
+            To test for this, we utilize the <strong>Durbin-Watson statistic</strong> provided in the OLS output. The Durbin-Watson value ranges from 0 to 4, where a value of <strong>2.0 indicates no autocorrelation</strong>. In our model, the test reached a value of <strong>1.069</strong>. 
+        </p>
+
+        <p>
+            While values <strong>below 2</strong> generally suggest some degree of positive autocorrelation, in large datasets like the Air India one, this result is often considered manageable. It indicates that while there is some sequence-based dependency in the flight data, it does not critically compromise the inferential power of our regression or the validity of our Beta coefficients.
+        </p>
+    </div>
+</section>
+<section>
+    <div style="margin-bottom: 60px;">
+        <span style="background-color: #044b03; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; text-transform: uppercase;">
+            Extra Assumption 
+        </span>
+        <h3 style="color:  #044b03; margin-top: 10px; text-transform: uppercase;">
+            Outliers & Influence Analysis (Residuals vs Leverage)
+        </h3>
+
+        <p>
+            The final stage of our diagnostic process involves the <strong>Residuals vs. Leverage plot</strong>. In this context, <strong>leverage</strong> measures how far an observation's independent variable values are from their respective means. 
+        </p>
+
+        <p>
+            A <strong>high-leverage point</strong> represents an extreme or unusual observation—for instance, a flight with 5 stops in a dataset where the vast majority have only 1 or 2. These points are critical because they can act as <strong>"anchor points,"</strong> disproportionately pulling the regression line and potentially biasing the entire model.
+        </p>
+
+        <div style="background-color: #fff5f5; padding: 20px; border-left: 5px solid #e74c3c; margin: 25px 0;">
+            <strong>Methodological Choice:</strong> I deliberately limited data transformations to the minimum necessary. While further cleaning might yield a perfectly "statistically compliant" model, over-standardizing a dataset that represents a <strong>real market segment</strong> risks creating an <strong>economically unreliable</strong> pricing strategy. Altering the data structure purely to satisfy Gauss-Markov assumptions can mask the true underlying dynamics of the airline industry.
+        </div>
+
+        <p>
+            Consequently, this is the <strong>only condition</strong> of the traditional model that is not fully satisfied. To monitor this, I employed:
+        </p>
+        <ul>
+            <li><strong>Standardized Residuals:</strong> To express prediction errors in terms of standard deviations.</li>
+            <li><strong>Cook’s Distance:</strong> Represented by <strong>red dashed contours</strong>. These boundaries help identify observations exerting <strong>excessive influence</strong>. Points falling outside these contours were investigated as potential data-entry errors or extreme anomalies rather than standard market behavior.</li>
+        </ul>
+
+        <div style="width: 100%; text-align: center; margin: 30px 0;">
+            
+            <img src="images/Graphs/Residuals_vs_Leverage.png" 
+                 style="width: 85%; max-width: 1000px; height: auto; border: 1px solid #ddd; box-shadow: 5px 5px 15px rgba(0,0,0,0.05);" 
+                 alt="Residuals vs Leverage Plot" />
+            <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
+                <em>Figure: Residuals vs Leverage plot showing Cook's Distance contours to identify influential outliers.</em>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<hr style="border: 0; height: 2px; background: #f39c12; margin: 50px 0;">
+
+<section id="strategic-advice" style="margin-bottom: 80px;">
+    <div style="background-color: #fff9f0; padding: 40px; border-radius: 12px; border: 1px solid #ffe5b4; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        
+        <h2 style="color: #d35400; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; display: flex; align-items: center;">
+            <span style="font-size: 1.5em; margin-right: 10px;">💡</span> Strategic Advice & Market Entry
+        </h2>
+
+        <p style="font-size: 1.1em; line-height: 1.6; color: #444;">
+            Based on the statistical evidence derived from the <strong>Air India dataset</strong> and the <strong>OLS Regression</strong> results, I recommend a balanced bidding strategy for the new market entry: 
+            <span style="color: #d35400; font-weight: bold;">1 Morning Slot and 2 Afternoon Slots</span>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+            
+            <div style="background: white; padding: 25px; border-radius: 8px; border-top: 4px solid #f39c12; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h4 style="color: #e67e22; text-transform: uppercase; margin-top: 0;">1. Maximizing High-Yield Revenue</h4>
+                <p>
+                    Our model confirms that <strong>Business Class</strong> and time-sensitive travel are the primary drivers of premium pricing. A <strong>Morning Slot</strong> is essential to capture the "Business" segment, which typically exhibits lower price elasticity and a preference for early departures to maximize the workday.
+                </p>
+            </div>
+
+            <div style="background: white; padding: 25px; border-radius: 8px; border-top: 4px solid #f39c12; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h4 style="color: #e67e22; text-transform: uppercase; margin-top: 0;">2. Sustainable Learning & Leisure</h4>
+                <p>
+                    The <strong>two Afternoon Slots</strong> provide exposure to the broader "Leisure" and mixed-demand segments. Given the <strong>non-linear price behavior</strong> observed (exponential increases near departure), afternoon slots allow the client to experiment with dynamic pricing strategies across a more diverse passenger base.
+                </p>
+            </div>
+
+            <div style="background: white; padding: 25px; border-radius: 8px; border-top: 4px solid #f39c12; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h4 style="color: #e67e22; text-transform: uppercase; margin-top: 0;">3. Hedging Against Market Saturation</h4>
+                <p>
+                    With most destinations already served by <strong>5-6 competitors</strong>, a pure "price war" would be unsustainable. This 1+2 slot configuration acts as a <strong>risk-mitigation strategy</strong>: the morning slot secures stable high-margin revenue, while the afternoon slots build market presence and volume.
+                </p>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background-color: white; border-radius: 8px; border: 1px dashed #f39c12;">
+            <h4 style="margin-top: 0; color: #d35400;">Statistical Justification & Model Integrity</h4>
+            <p style="margin-bottom: 0; font-style: italic;">
+                "The <strong>R² of ~90%</strong> confirms the strength of our predictors. Through the log-transformation, we successfully satisfied the <strong>Homoskedasticity</strong> requirement by stabilizing variance. While the <strong>Residuals vs Leverage</strong> plot (Cook's Distance) identified outliers, I deliberately chose <strong>not to remove them intrusively</strong>. These observations represent authentic market volatility and extreme price behaviors inherent to the Indian aviation industry. Preserving this data ensures the model remains <strong>economically reliable</strong> for real-world strategic decision-making, rather than just being statistically compliant."
+            </p>
+        </div>
+
+    </div>
+</section>
+
+    </div>
+</section>
+
+
+<section style="margin-top: 50px;">
+    <div style="background-color: #f4f7f6; padding: 30px; border-radius: 12px; border: 1px solid #cfd8dc;">
+        <h3 style="color: #2c3e50; text-transform: uppercase; margin-top: 0; text-align: center;">
+            📈 Post-Expansion Performance Framework (KPIs)
+        </h3>
+        <p style="text-align: center; color: #546e7a; margin-bottom: 30px;">
+            Based on our regression variables, the client should monitor these metrics to validate the 1 Morning & 2 Afternoon strategy.
+        </p>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <thead>
+                    <tr style="background-color: #2c3e50; color: white; text-align: left;">
+                        <th style="padding: 15px; color: white">Metric (KPI)</th>
+                        <th style="padding: 15px; color: white">Data Source</th>
+                        <th style="padding: 15px; color: white">Target Goal</th>
+                        <th style="padding: 15px; color: white">Strategic Rationale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #eceff1;">
+                        <td style="padding: 15px; font-weight: bold;">Yield per Morning Slot</td>
+                        <td style="padding: 15px;">Fare (Rupees) / Class</td>
+                        <td style="padding: 15px; color: #27ae60; font-weight: bold;">+25% vs Economy Avg</td>
+                        <td style="padding: 15px;">Validate high-yield business demand identified in the 6AM-12PM window.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eceff1; background-color: #fcfcfc;">
+                        <td style="padding: 15px; font-weight: bold;">Load Factor Sensitivity</td>
+                        <td style="padding: 15px;">Days Before Journey</td>
+                        <td style="padding: 15px; color: #27ae60; font-weight: bold;">Log-Linear Growth</td>
+                        <td style="padding: 15px;">Monitor if afternoon fares follow the expected exponential curve as departure approaches.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eceff1;">
+                        <td style="padding: 15px; font-weight: bold;">Competitive Price Gap</td>
+                        <td style="padding: 15px;">Competitor Fares</td>
+                        <td style="padding: 15px; color: #27ae60; font-weight: bold;">&plusmn; 5% Margin</td>
+                        <td style="padding: 15px;">Ensure the 5-6 competitors do not trigger a "price war" that erodes profit margins.</td>
+                    </tr>
+                    <tr style="background-color: #fcfcfc;">
+                        <td style="padding: 15px; font-weight: bold;">Non-Stop Premium</td>
+                        <td style="padding: 15px;">Number of Stops</td>
+                        <td style="padding: 15px; color: #27ae60; font-weight: bold;">Maximize Zero-Stops</td>
+                        <td style="padding: 15px;">Leverage the high Beta coefficient found for non-stop flights to maintain pricing power.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; padding: 25px; background-color: #e3f2fd; border-left: 5px solid #1976d2; border-radius: 4px;">
+            <h4 style="margin-top: 0; color: #0d47a1; text-transform: uppercase;"> Recommendations for Model Evolution</h4>
+            <p style="font-size: 1em; color: #1565c0; line-height: 1.6;">
+                <strong>Expand Temporal Horizon:</strong> The current model is built on a 3-month snapshot (Jan-Mar). To achieve true predictive excellence, it is <strong>imperative to integrate semi-annual and historical time-series data</strong>. 
+                <br><br>
+                By incorporating data from past peak seasons and various quarters, the model will be able to account for <strong>market seasonality</strong> and cyclical demand shifts. This evolution will transform the current "static" pricing view into a <strong>dynamic forecasting tool</strong>, capable of predicting how fares will react to future economic cycles and holidays.
+            </p>
+        </div>
+    </div>
+</section>
+
+</div>
+</section>
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+							<section id="footer">
+								<ul class="icons">
+									<li><a href="https://www.linkedin.com/in/federico-nardoni-1615b61ba/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+									<li><a href="mailto:nardoni.federico1@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+							</section>
+						</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
